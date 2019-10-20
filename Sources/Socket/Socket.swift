@@ -2437,10 +2437,11 @@ public class Socket: SocketReader, SocketWriter {
 	/// 	- bufSize: 			The size of the buffer.
 	///		- port:				Port to listen on.
 	/// 	- maxBacklogSize: 	The maximum size of the queue containing pending connections. Default is *Socket.SOCKET_DEFAULT_MAX_BACKLOG*.
+	///		- node:				Can be set to listen on a *specific address*. The value passed is an *optional String* containing the numerical
 	///
 	///	- Returns:				Tuple containing the number of bytes read and the `Address` of the client who sent the data.
 	///
-	public func listen(forMessage buffer: UnsafeMutablePointer<CChar>, bufSize: Int, on port: Int, maxBacklogSize: Int = Socket.SOCKET_DEFAULT_MAX_BACKLOG) throws -> (bytesRead: Int, address: Address?) {
+	public func listen(forMessage buffer: UnsafeMutablePointer<CChar>, bufSize: Int, on port: Int, maxBacklogSize: Int = Socket.SOCKET_DEFAULT_MAX_BACKLOG, node: String? = nil) throws -> (bytesRead: Int, address: Address?) {
 
 		// Make sure the buffer is valid...
 		if bufSize == 0 {
@@ -2463,7 +2464,7 @@ public class Socket: SocketReader, SocketWriter {
 
 		// Set up the socket for listening for a message unless we're already set up...
 		if !sig.isBound {
-			try self.listen(on: port, maxBacklogSize: maxBacklogSize)
+			try self.listen(on: port, maxBacklogSize: maxBacklogSize, node: node)
 		}
 
 		// If we're not bound, something went wrong...
@@ -2484,10 +2485,11 @@ public class Socket: SocketReader, SocketWriter {
 	///		- data:				Data buffer to receive the data read.
 	///		- port:				Port to listen on.
 	/// 	- maxBacklogSize: 	The maximum size of the queue containing pending connections. Default is *Socket.SOCKET_DEFAULT_MAX_BACKLOG*.
+	///		- node:				Can be set to listen on a *specific address*. The value passed is an *optional String* containing the numerical
 	///
 	///	- Returns:				Tuple containing the number of bytes read and the `Address` of the client who sent the data.
 	///
-	public func listen(forMessage data: NSMutableData, on port: Int, maxBacklogSize: Int = Socket.SOCKET_DEFAULT_MAX_BACKLOG) throws -> (bytesRead: Int, address: Address?) {
+	public func listen(forMessage data: NSMutableData, on port: Int, maxBacklogSize: Int = Socket.SOCKET_DEFAULT_MAX_BACKLOG, node: String? = nil) throws -> (bytesRead: Int, address: Address?) {
 
 		// The socket must've been created...
 		if self.socketfd == Socket.SOCKET_INVALID_DESCRIPTOR {
@@ -2504,7 +2506,7 @@ public class Socket: SocketReader, SocketWriter {
 
 		// Set up the socket for listening for a message unless we're already set up...
 		if !sig.isBound {
-			try self.listen(on: port, maxBacklogSize: maxBacklogSize)
+			try self.listen(on: port, maxBacklogSize: maxBacklogSize, node: node)
 		}
 
 		// If we're not bound, something went wrong...
@@ -2525,10 +2527,11 @@ public class Socket: SocketReader, SocketWriter {
 	///		- data:				Data buffer to receive the data read.
 	///		- port:				Port to listen on.
 	/// 	- maxBacklogSize: 	The maximum size of the queue containing pending connections. Default is *Socket.SOCKET_DEFAULT_MAX_BACKLOG*.
+	///		- node:				Can be set to listen on a *specific address*. The value passed is an *optional String* containing the numerical
 	///
 	///	- Returns:				Tuple containing the number of bytes read and the `Address` of the client who sent the data.
 	///
-	public func listen(forMessage data: inout Data, on port: Int, maxBacklogSize: Int = Socket.SOCKET_DEFAULT_MAX_BACKLOG) throws -> (bytesRead: Int, address: Address?) {
+	public func listen(forMessage data: inout Data, on port: Int, maxBacklogSize: Int = Socket.SOCKET_DEFAULT_MAX_BACKLOG, node: String? = nil) throws -> (bytesRead: Int, address: Address?) {
 
 		// The socket must've been created...
 		if self.socketfd == Socket.SOCKET_INVALID_DESCRIPTOR {
@@ -2545,7 +2548,7 @@ public class Socket: SocketReader, SocketWriter {
 
 		// Set up the socket for listening for a message unless we're already set up...
 		if !sig.isBound {
-			try self.listen(on: port, maxBacklogSize: maxBacklogSize)
+			try self.listen(on: port, maxBacklogSize: maxBacklogSize, node: node)
 		}
 
 		// If we're not bound, something went wrong...
